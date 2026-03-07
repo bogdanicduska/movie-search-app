@@ -1,0 +1,15 @@
+.env
+
+__pycache__/
+*.pyc
+*.pyo
+
+venv/
+.env/
+
+.streamlit/
+
+.DS_Store
+Thumbs.db
+
+.vscode/
