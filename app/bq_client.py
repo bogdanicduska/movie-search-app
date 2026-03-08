@@ -4,7 +4,8 @@ from app.config import PROJECT_ID, BQ_DATASET
 from app.utils.logger import log_sql
 
 
-client = bigquery.Client(project=PROJECT_ID)
+def get_client():
+    return bigquery.Client(project=PROJECT_ID)
 
 
 def run_query(query: str, params=None):
@@ -16,5 +17,6 @@ def run_query(query: str, params=None):
         query_parameters=params or []
     )
 
+    client = get_client()
     query_job = client.query(formatted_query, job_config=job_config)
     return query_job.result().to_dataframe()
