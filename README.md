@@ -1,11 +1,12 @@
-Movie Search App (BigQuery + Streamlit)
+# **Movie Search App (BigQuery + Streamlit)** #
 
 A cloud-based movie search application that allows users to explore a movie database using filters and view enriched movie details retrieved from The Movie Database (TMDB) API.
 
 The application runs on Google Cloud Run and queries movie data stored in Google BigQuery. It provides an interactive interface built with Streamlit.
 
 
-Project Overview
+
+## **Project Overview** ##
 | Component        | Technology       |
 | ---------------- | ---------------- |
 | User Interface   | Streamlit        |
@@ -16,69 +17,74 @@ Project Overview
 | Deployment       | Google Cloud Run |
 
 
-Live Application
+**Live Application**
 https://movie-search-app-588147963452.europe-west6.run.app
 
-Features
-Search functionality
+
+## **Features** ##
+
+
+*Search functionality*
 
 Users can search movies using several filters:
 
-Movie title (with autocomplete suggestions)
++ Movie title (with autocomplete suggestions)
 
-Language filter
++ Language filter
 
-Genre filter
++ Genre filter
 
-Release year filter
++ Release year filter
 
-Minimum average rating filter
++ Minimum average rating filter
 
 
-Results display
+
+*Results display*
 
 Search results include:
 
-Results table
++ Results table
 
-Number of movies found
++ Number of movies found
 
-Best rating metric
++ Best rating metric
 
-Newest movie metric
++ Newest movie metric
 
-Release year distribution chart
++ Release year distribution chart
 
 
-Movie details panel
+
+*Movie details panel*
 
 When a movie is selected, the application displays:
 
-Movie poster
++ Movie poster
 
-Overview description
++ Overview description
 
-Genres
++ Genres
 
-Language and country
++ Language and country
 
-Release year
++ Release year
 
-Average rating
++ Average rating
 
-Number of ratings
++ Number of ratings
 
 
-External API integration
+*External API integration*
 
 The application uses the TMDB API to retrieve:
 
-Movie posters
++ Movie posters
 
-Movie descriptions
++ Movie descriptions
 
 
-Architecture Diagram
+## **Architecture Diagram** ##
                 +------------------+
                 |   User Browser   |
                 |   (Streamlit UI) |
@@ -127,7 +133,9 @@ Architecture Diagram
                 | Poster + Overview|
                 +------------------+
 
-Repository Structure
+## Repository Structure
+
+```
 movie-search-app/
 │
 ├── app/
@@ -165,13 +173,13 @@ movie-search-app/
 ├── requirements.txt
 ├── cloudbuild.yaml
 └── README.md
+```
 
-
-Dataset
+## **Dataset** ##
 
 Two datasets are used: movies table and ratings table (uploaded to Google Cloud Storage before importing into BigQuery):
 
-Movies Table
+**Movies Table**
 | Column       | Description             |
 | ------------ | ----------------------- |
 | movieId      | Unique movie identifier |
@@ -183,7 +191,7 @@ Movies Table
 | country      | Country of production   |
 
 
-Ratings Table
+**Ratings Table**
 | Column    | Description      |
 | --------- | ---------------- |
 | userId    | User identifier  |
@@ -192,7 +200,7 @@ Ratings Table
 | timestamp | Rating timestamp |
 
 
-BigQuery SQL Queries
+## **BigQuery SQL Queries** ##
 
 The application executes SQL queries to retrieve movie information and compute aggregated ratings.
 
@@ -215,64 +223,74 @@ GROUP BY m.movieId, m.title, m.genres, m.language, m.release_year, m.country
 Executed SQL queries are printed in the terminal for debugging.
 
 
-Instructions to Use the Application
+## **Instructions to Use the Application** ##
 
-Enter a movie title in the search field.
+1. Enter a movie title in the search field.
 
-Use the filters in the sidebar:
+2. Use the filters in the sidebar:
 
-Language
++ Language
 
-Genre
++ Genre
 
-Release year
++ Release year
 
-Minimum average rating
++ Minimum average rating
 
-Click Search.
+3. Click Search.
 
-Browse the results table.
+4. Browse the results table.
 
-Select a movie from the dropdown to view full details.
+5. Select a movie from the dropdown to view full details.
 
 Displayed details include:
 
-movie poster
++ movie poster
 
-movie overview
++ movie overview
 
-average rating
++ average rating
 
-rating count
++ rating count
 
-genre information
++ genre information
 
 
-Running the Application Locally
-Install dependencies
+### **Running the Application Locally** ###
+
+**1. Install dependencies**
+
 pip install -r requirements.txt
-Create environment variables
+
+**2. Create environment variables**
 
 Create a .env file:
 
 GOOGLE_CLOUD_PROJECT=your_project_id
+
 BQ_DATASET=movies_app
+
 TMDB_API_KEY=your_tmdb_api_key
-Run the application
+
+**3. Run the application**
+
 streamlit run app/main.py
 
 
-Docker
+### **Docker** ###
 
 The application is containerized using Docker.
 
-Build the container
+**1. Build the container**
+
 docker build -t movie-search-app .
-Run the container
+
+**2. Run the container**
+
 docker run -p 8080:8080 movie-search-app
 
 
-Cloud Deployment
+### **Cloud Deployment** ###
 
 The application is deployed to Google Cloud Run.
 
@@ -286,7 +304,7 @@ gcloud run deploy movie-search-app \
 Environment variables are configured directly in Cloud Run.
 
 
-Screenshots
+## **Screenshots** ##
 
 Application preview:
 
@@ -306,42 +324,42 @@ Application preview:
 
 The interface includes:
 
-search filters sidebar
++ search filters sidebar
 
-results table
++ results table
 
-movie poster
++ movie poster
 
-overview
++ overview
 
-rating metrics
++ rating metrics
 
-release year chart
++ release year chart
 
 
-Key Implementation Decisions
-Modular architecture
+## **Key Implementation Decisions** ##
++ Modular architecture
 
 The application separates logic into services, UI components, and database access modules to improve maintainability and scalability.
 
-BigQuery for large datasets
++ BigQuery for large datasets
 
 Ratings data (~520MB) and movies data are stored in BigQuery to efficiently execute SQL queries on large datasets.
 
-Streamlit for UI development
++ Streamlit for UI development
 
 Streamlit enables rapid development of interactive data exploration interfaces.
 
-Cached dropdown queries
++ Cached dropdown queries
 
 Language and genre lists are cached using st.cache_data to avoid repeated database queries.
 
-External API integration
++ External API integration
 
 TMDB API enriches the dataset with additional movie information such as posters and descriptions.
 
 
-Technologies Used
+## **Technologies Used** ##
 
 Python
 
