@@ -1,58 +1,40 @@
 import streamlit as st
 
 from app.services.movie_service import search_movies, get_movie_details
+from app.ui.search_panel import render_search_panel
+from app.ui.results_panel import render_results_panel
+from app.ui.details_panel import render_details_panel
 
 
 st.set_page_config(page_title="Movie Search App", layout="wide")
 st.title("Movie Search App")
 
-st.sidebar.header("Search Filters")
+if "results_df" not in st.session_state:
+    st.session_state.results_df = None
 
-title = st.sidebar.text_input("Movie title")
-language = st.sidebar.text_input("Language code (e.g. en, fr, hi)")
-genre = st.sidebar.text_input("Genre (e.g. Comedy, Drama)")
-min_year = st.sidebar.number_input("Released after year", min_value=1900, max_value=2100, value=2000)
-min_avg_rating = st.sidebar.slider("Minimum average rating", 0.0, 5.0, 3.5, 0.1)
+if "selected_movie_id" not in st.session_state:
+    st.session_state.selected_movie_id = None
 
-search_clicked = st.sidebar.button("Search")
+filters = render_search_panel()
 
-if search_clicked:
-    results_df = search_movies(
-        title=title or None,
-        language=language or None,
-        genre=genre or None,
-        min_year=min_year,
-        min_avg_rating=min_avg_rating,
+if filters["search_clicked"]:
+    st.session_state.results_df = search_movies(
+        title=filters["title"] or None,
+        language=filters["language"] or None,
+        genre=filters["genre"] or None,
+        min_year=filters["min_year"],
+        min_avg_rating=filters["min_avg_rating"],
     )
+    st.session_state.selected_movie_id = None
 
-    st.subheader("Search Results")
+if st.session_state.results_df is not None:
+    results_df = st.session_state.results_df
 
-    if results_df.empty:
-        st.info("No movies found.")
-    else:
-        st.dataframe(results_df, use_container_width=True)
+    selected_movie_id = render_results_panel(results_df)
+    st.session_state.selected_movie_id = selected_movie_id
 
-        movie_options = {
-            f"{row['title']} ({row['release_year']})": row["movieId"]
-            for _, row in results_df.iterrows()
-        }
-
-        selected_label = st.selectbox("Select a movie", list(movie_options.keys()))
-        selected_movie_id = movie_options[selected_label]
-
-        details_df, ratings_df = get_movie_details(selected_movie_id)
-
-        if not details_df.empty:
-            movie = details_df.iloc[0]
-            st.subheader(movie["title"])
-            st.write(f"**Genres:** {movie['genres']}")
-            st.write(f"**Language:** {movie['language']}")
-            st.write(f"**Release year:** {movie['release_year']}")
-            st.write(f"**Country:** {movie['country']}")
-
-        if not ratings_df.empty:
-            rating_row = ratings_df.iloc[0]
-            st.write(f"**Average rating:** {rating_row['avg_rating']}")
-            st.write(f"**Rating count:** {rating_row['rating_count']}")
+    if st.session_state.selected_movie_id is not None:
+        details_df, ratings_df = get_movie_details(st.session_state.selected_movie_id)
+        render_details_panel(details_df, ratings_df)
 else:
     st.info("Choose filters in the sidebar and click Search.")

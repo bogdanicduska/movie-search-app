@@ -1,7 +1,13 @@
 from google.cloud import bigquery
 
 from app.bq_client import run_query
-from app.queries import SEARCH_QUERY, MOVIE_DETAILS_QUERY, RATING_STATS_QUERY
+from app.queries import (
+    SEARCH_QUERY,
+    MOVIE_DETAILS_QUERY,
+    RATING_STATS_QUERY,
+    LANGUAGES_QUERY,
+    GENRES_QUERY,
+)
 
 
 def search_movies(title=None, language=None, genre=None, min_year=None, min_avg_rating=None):
@@ -20,3 +26,10 @@ def get_movie_details(movie_id):
     details_df = run_query(MOVIE_DETAILS_QUERY, params)
     ratings_df = run_query(RATING_STATS_QUERY, params)
     return details_df, ratings_df
+
+def get_languages():
+    return run_query(LANGUAGES_QUERY)
+
+
+def get_genres():
+    return run_query(GENRES_QUERY)

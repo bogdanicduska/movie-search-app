@@ -44,3 +44,20 @@ SELECT
 FROM `{project}.{dataset}.ratings`
 WHERE movieId = @movie_id
 """
+
+LANGUAGES_QUERY = """
+SELECT DISTINCT language
+FROM `{project}.{dataset}.movies`
+WHERE language IS NOT NULL
+  AND TRIM(language) != ""
+ORDER BY language
+"""
+
+GENRES_QUERY = """
+SELECT DISTINCT genre
+FROM `{project}.{dataset}.movies`,
+UNNEST(SPLIT(genres, '|')) AS genre
+WHERE genre IS NOT NULL
+  AND TRIM(genre) != ""
+ORDER BY genre
+"""
