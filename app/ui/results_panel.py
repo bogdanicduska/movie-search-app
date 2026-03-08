@@ -1,9 +1,8 @@
 import streamlit as st
-import pandas as pd
 
 
 def render_results_panel(results_df):
-    st.subheader("Search Results")
+    st.subheader("🎬 Search Results")
 
     if results_df.empty:
         st.info("No movies found.")
@@ -22,9 +21,10 @@ def render_results_panel(results_df):
 
     col1, col2, col3 = st.columns(3)
     col1.metric("Movies found", total_movies)
-    col2.metric("Best rating", best_rating if best_rating else "N/A")
-    col3.metric("Newest release", newest_year if newest_year else "N/A")
+    col2.metric("Best rating", best_rating if best_rating is not None else "N/A")
+    col3.metric("Newest release", newest_year if newest_year is not None else "N/A")
 
+    st.success(f"Found **{total_movies} movies** matching your filters.")
     st.markdown("")
 
     # ---- Clean dataframe for display ----
@@ -58,11 +58,13 @@ def render_results_panel(results_df):
     if "Avg Rating" in display_df.columns:
         display_df["Avg Rating"] = display_df["Avg Rating"].round(2)
 
-    st.dataframe(
-        display_df,
-        use_container_width=True,
-        hide_index=True,
-    )
+    # ---- Results table in bordered container ----
+    with st.container(border=True):
+        st.dataframe(
+            display_df,
+            use_container_width=True,
+            hide_index=True,
+        )
 
     st.markdown("")
 
@@ -83,7 +85,7 @@ def render_results_panel(results_df):
     }
 
     selected_label = st.selectbox(
-        "Select a movie to view details",
+        "🎥 Select a movie to view full details",
         list(movie_options.keys()),
         key="movie_selectbox",
     )

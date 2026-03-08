@@ -42,7 +42,8 @@ def reset_search_state():
 def render_search_panel():
     init_search_state()
 
-    st.sidebar.header("Search Filters")
+    st.sidebar.markdown("## 🔎 Search Filters")
+    st.sidebar.caption("Refine the movie search using the filters below.")
 
     typed_title = st.sidebar.text_input("Movie title", key="title_input")
     selected_title = typed_title
@@ -61,8 +62,8 @@ def render_search_panel():
 
             if chosen_option != "Keep typed text":
                 selected_title = chosen_option
-    else:
-        st.session_state["title_suggestion"] = "Keep typed text"
+
+    st.sidebar.markdown("---")
 
     languages_df = load_languages()
     genres_df = load_genres()
@@ -72,6 +73,8 @@ def render_search_panel():
 
     language = st.sidebar.selectbox("Language", language_options, key="language_filter")
     genre = st.sidebar.selectbox("Genre", genre_options, key="genre_filter")
+
+    st.sidebar.markdown("---")
 
     min_year = st.sidebar.number_input(
         "Released after year",
@@ -87,9 +90,11 @@ def render_search_panel():
         key="min_rating_filter",
     )
 
+    st.sidebar.markdown("")
+
     col1, col2 = st.sidebar.columns(2)
-    search_clicked = col1.button("Search")
-    col2.button("Reset", on_click=reset_search_state)
+    search_clicked = col1.button("Search", use_container_width=True)
+    col2.button("Reset", on_click=reset_search_state, use_container_width=True)
 
     return {
         "title": selected_title,
