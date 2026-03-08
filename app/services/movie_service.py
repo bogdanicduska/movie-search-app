@@ -7,6 +7,7 @@ from app.queries import (
     RATING_STATS_QUERY,
     LANGUAGES_QUERY,
     GENRES_QUERY,
+    AUTOCOMPLETE_QUERY,
 )
 
 
@@ -33,3 +34,7 @@ def get_languages():
 
 def get_genres():
     return run_query(GENRES_QUERY)
+
+def autocomplete_titles(query_text):
+    params = [bigquery.ScalarQueryParameter("q", "STRING", query_text)]
+    return run_query(AUTOCOMPLETE_QUERY, params)
