@@ -6,13 +6,15 @@ The application runs on Google Cloud Run and queries movie data stored in Google
 
 
 Project Overview
-Component	Technology
-User Interface	Streamlit
-Database	Google BigQuery
-Query Language	SQL
-External API	TMDB
-Containerization	Docker
-Deployment	Google Cloud Run
+| Component        | Technology       |
+| ---------------- | ---------------- |
+| User Interface   | Streamlit        |
+| Database         | Google BigQuery  |
+| Query Language   | SQL              |
+| External API     | TMDB             |
+| Containerization | Docker           |
+| Deployment       | Google Cloud Run |
+
 
 Live Application
 https://movie-search-app-588147963452.europe-west6.run.app
@@ -32,6 +34,7 @@ Release year filter
 
 Minimum average rating filter
 
+
 Results display
 
 Search results include:
@@ -46,9 +49,10 @@ Newest movie metric
 
 Release year distribution chart
 
+
 Movie details panel
 
-When a movie is selected, the app displays:
+When a movie is selected, the application displays:
 
 Movie poster
 
@@ -64,9 +68,10 @@ Average rating
 
 Number of ratings
 
+
 External API integration
 
-The application uses TMDB API to retrieve:
+The application uses the TMDB API to retrieve:
 
 Movie posters
 
@@ -148,7 +153,9 @@ movie-search-app/
 │   └── sample_schema_notes.md
 │
 ├── screenshots/
-│   └── app-preview.png
+│   ├── search-interface.png
+│   ├── search-results.png
+│   └── movie-details.png
 │
 ├── tests/
 │   ├── test_queries.py
@@ -165,21 +172,25 @@ Dataset
 Two datasets are used: movies table and ratings table (uploaded to Google Cloud Storage before importing into BigQuery):
 
 Movies Table
-Column	Description
-movieId	Unique movie identifier
-title	Movie title
-genres	Movie genres
-tmdbId	TMDB identifier
-language	Movie language
-release_year	Year of release
-country	Country of production
+| Column       | Description             |
+| ------------ | ----------------------- |
+| movieId      | Unique movie identifier |
+| title        | Movie title             |
+| genres       | Movie genres            |
+| tmdbId       | TMDB identifier         |
+| language     | Movie language          |
+| release_year | Year of release         |
+| country      | Country of production   |
+
 
 Ratings Table
-Column	Description
-userId	User identifier
-movieId	Movie identifier
-rating	Rating value
-timestamp	Rating timestamp
+| Column    | Description      |
+| --------- | ---------------- |
+| userId    | User identifier  |
+| movieId   | Movie identifier |
+| rating    | Rating value     |
+| timestamp | Rating timestamp |
+
 
 BigQuery SQL Queries
 
@@ -204,7 +215,7 @@ GROUP BY m.movieId, m.title, m.genres, m.language, m.release_year, m.country
 Executed SQL queries are printed in the terminal for debugging.
 
 
-Instructions to use Application:
+Instructions to Use the Application
 
 Enter a movie title in the search field.
 
