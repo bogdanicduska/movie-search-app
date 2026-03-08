@@ -13,11 +13,38 @@ def load_genres():
     return get_genres()
 
 
+def init_search_state():
+    defaults = {
+        "title_input": "",
+        "title_suggestion": "Keep typed text",
+        "language_filter": "Any",
+        "genre_filter": "Any",
+        "min_year_filter": 2000,
+        "min_rating_filter": 3.5,
+    }
+
+    for key, value in defaults.items():
+        if key not in st.session_state:
+            st.session_state[key] = value
+
+
+def reset_search_state():
+    st.session_state["title_input"] = ""
+    st.session_state["title_suggestion"] = "Keep typed text"
+    st.session_state["language_filter"] = "Any"
+    st.session_state["genre_filter"] = "Any"
+    st.session_state["min_year_filter"] = 2000
+    st.session_state["min_rating_filter"] = 3.5
+    st.session_state["results_df"] = None
+    st.session_state["selected_movie_id"] = None
+
+
 def render_search_panel():
+    init_search_state()
+
     st.sidebar.header("Search Filters")
 
-    typed_title = st.sidebar.text_input("Movie title")
-
+    typed_title = st.sidebar.text_input("Movie title", key="title_input")
     selected_title = typed_title
 
     if typed_title and len(typed_title.strip()) >= 2:
@@ -29,11 +56,13 @@ def render_search_panel():
             chosen_option = st.sidebar.selectbox(
                 "Title suggestions",
                 title_options,
-                key="title_suggestions"
+                key="title_suggestion",
             )
 
             if chosen_option != "Keep typed text":
                 selected_title = chosen_option
+    else:
+        st.session_state["title_suggestion"] = "Keep typed text"
 
     languages_df = load_languages()
     genres_df = load_genres()
@@ -41,25 +70,26 @@ def render_search_panel():
     language_options = ["Any"] + languages_df["language"].tolist()
     genre_options = ["Any"] + genres_df["genre"].tolist()
 
-    language = st.sidebar.selectbox("Language", language_options)
-    genre = st.sidebar.selectbox("Genre", genre_options)
+    language = st.sidebar.selectbox("Language", language_options, key="language_filter")
+    genre = st.sidebar.selectbox("Genre", genre_options, key="genre_filter")
 
     min_year = st.sidebar.number_input(
         "Released after year",
         min_value=1900,
         max_value=2100,
-        value=2000,
+        key="min_year_filter",
     )
 
     min_avg_rating = st.sidebar.slider(
         "Minimum average rating",
         0.0,
         5.0,
-        3.5,
-        0.1,
+        key="min_rating_filter",
     )
 
-    search_clicked = st.sidebar.button("Search")
+    col1, col2 = st.sidebar.columns(2)
+    search_clicked = col1.button("Search")
+    col2.button("Reset", on_click=reset_search_state)
 
     return {
         "title": selected_title,

@@ -20,8 +20,8 @@ filters = render_search_panel()
 if filters["search_clicked"]:
     st.session_state.results_df = search_movies(
         title=filters["title"] or None,
-        language=filters["language"] or None,
-        genre=filters["genre"] or None,
+        language=filters["language"],
+        genre=filters["genre"],
         min_year=filters["min_year"],
         min_avg_rating=filters["min_avg_rating"],
     )
